@@ -162,8 +162,12 @@ const TransactionList = ({navigation}) => {
     setTransactionList({...list});
   }, []);
 
-  const onPressTransaction = () => {
-    navigation.replace('Detail Transaction');
+  const onPressTransaction = (key) => {
+    console.log(key);
+    console.log(transactionList[key]);
+    navigation.navigate('Detail Transaction', {
+      transaction: transactionList[key],
+    });
   };
 
   return (
@@ -185,7 +189,7 @@ const TransactionList = ({navigation}) => {
           {Object.keys(transactionList).map((key, index) => {
             const transaction = transactionList[key];
             return (
-              <ListItem key={index} onPress={() => onPressTransaction()}>
+              <ListItem key={index} onPress={() => onPressTransaction(key)}>
                 <Body>
                   <Text>{`${transaction[
                     'sender_bank'
