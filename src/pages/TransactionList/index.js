@@ -4,13 +4,19 @@ import {
   Content,
   List,
   ListItem,
-  Body,
   Text,
   Header,
   Item,
   Input,
   Button,
+  Right,
+  Grid,
+  Col,
 } from 'native-base';
+import {View, TouchableHighlight} from 'react-native';
+
+import {formatCurrency} from '../../utils/currency';
+import {formatDate} from '../../utils/date';
 
 const TransactionList = ({navigation}) => {
   const [search, setSearch] = useState('');
@@ -163,44 +169,114 @@ const TransactionList = ({navigation}) => {
   }, []);
 
   const onPressTransaction = (key) => {
-    console.log(key);
-    console.log(transactionList[key]);
     navigation.navigate('Detail Transaction', {
       transaction: transactionList[key],
     });
   };
 
+  const renderSuccessButton = () => {
+    return (
+      <TouchableHighlight>
+        <View
+          style={{
+            backgroundColor: '#54B685',
+            padding: 6,
+            borderRadius: 6,
+          }}>
+          <Text style={{color: 'white', fontSize: 10}}>Berhasil</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
+  const renderPendingButton = () => {
+    return (
+      <TouchableHighlight>
+        <View
+          style={{
+            borderColor: '#EB7F5C',
+            borderWidth: 1,
+            padding: 6,
+            borderRadius: 6,
+          }}>
+          <Text style={{fontSize: 10, fontWeight: 'bold'}}>Pengecekan</Text>
+        </View>
+      </TouchableHighlight>
+    );
+  };
+
   return (
-    <Container>
-      <Header searchBar rounded style={{backgroundColor: 'white'}}>
-        <Item>
-          <Input
-            value={search}
-            placeholder={'Cari nama, bank, atau nominal'}
-            onChangeText={(value) => setSearch(value)}
-          />
-        </Item>
-        <Button transparent>
-          <Text>Search</Text>
-        </Button>
+    <Container style={{backgroundColor: '#F7F9F8'}}>
+      <Header searchBar rounded style={{backgroundColor: 'white', margin: 10}}>
+        <Grid>
+          <Col style={{flex: 2}}>
+            <Item>
+              <Input
+                style={{fontSize: 14}}
+                value={search}
+                placeholder={'Cari nama, bank, atau nominal'}
+                onChangeText={(value) => setSearch(value)}
+              />
+            </Item>
+          </Col>
+          <Col style={{flex: 1}}>
+            <View
+              style={{flex: 1, justifyContent: 'center', marginLeft: 'auto'}}>
+              <Text
+                style={{fontSize: 12, fontWeight: 'bold', color: '#EB7F5C'}}>
+                Tanggal Terbaru
+              </Text>
+            </View>
+          </Col>
+        </Grid>
       </Header>
       <Content>
         <List>
           {Object.keys(transactionList).map((key, index) => {
             const transaction = transactionList[key];
+            const borderColor =
+              transaction['status'] === 'SUCCESS'
+                ? '#54B685'
+                : transaction['status'] === 'PENDING'
+                ? '#EB7F5C'
+                : '000A00';
+
             return (
-              <ListItem key={index} onPress={() => onPressTransaction(key)}>
-                <Body>
-                  <Text>{`${transaction[
+              <ListItem
+                noIndent={true}
+                key={index}
+                onPress={() => onPressTransaction(key)}
+                style={{
+                  backgroundColor: 'white',
+                  marginBottom: 8,
+                  borderWidth: 0,
+                  marginHorizontal: 10,
+                  borderLeftWidth: 8,
+                  borderBottomLeftRadius: 8,
+                  borderTopLeftRadius: 8,
+                  borderColor: borderColor,
+                  borderBottomColor: 'white',
+                }}>
+                <Content>
+                  <Text style={{fontWeight: 'bold'}}>{`${transaction[
                     'sender_bank'
-                  ].toUpperCase()} -> ${transaction[
+                  ].toUpperCase()} → ${transaction[
                     'beneficiary_bank'
                   ].toUpperCase()}`}</Text>
                   <Text>{transaction['beneficiary_name']}</Text>
                   <Text>
-                    {`${transaction['amount']} . ${transaction['created_at']}`}
+                    {`${formatCurrency(transaction['amount'])} • ${formatDate(
+                      transaction['created_at'],
+                    )}`}
                   </Text>
-                </Body>
+                </Content>
+                <Right>
+                  {transaction['status'] === 'SUCCESS'
+                    ? renderSuccessButton()
+                    : transaction['status'] === 'PENDING'
+                    ? renderPendingButton()
+                    : null}
+                </Right>
               </ListItem>
             );
           })}

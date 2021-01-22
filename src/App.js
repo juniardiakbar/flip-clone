@@ -16,8 +16,16 @@ const App = () => {
           component={Splash}
           options={{headerShown: false}}
         />
-        <Stack.Screen name="Transaction List" component={TransactionList} />
-        <Stack.Screen name="Detail Transaction" component={DetailTransaction} />
+        <Stack.Screen
+          name="Transaction List"
+          component={TransactionList}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Detail Transaction"
+          component={DetailTransaction}
+          options={{headerShown: false}}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
