@@ -26,11 +26,13 @@ import {
 
 import {formatCurrency} from '../../utils/currency';
 import {formatDate} from '../../utils/date';
+import {sortAndSearchList} from '../../utils/list';
 
 const TransactionList = ({navigation}) => {
   const [search, setSearch] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
-  const [transactionList, setTransactionList] = useState({});
+  const [transactionListOriginal, setTransactionListOriginal] = useState({});
+  const [transactionList, setTransactionList] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState(0);
 
   const sortOption = [
@@ -40,6 +42,12 @@ const TransactionList = ({navigation}) => {
     'Tanggal Terbaru',
     'Tanggal Terlama',
   ];
+
+  useEffect(() => {
+    setTransactionList(
+      sortAndSearchList(transactionListOriginal, search, selectedSortOption),
+    );
+  }, [selectedSortOption, search]);
 
   useEffect(() => {
     const list = {
@@ -184,7 +192,8 @@ const TransactionList = ({navigation}) => {
         fee: 0,
       },
     };
-    setTransactionList({...list});
+    setTransactionListOriginal({...list});
+    setTransactionList(sortAndSearchList(list, search, selectedSortOption));
   }, []);
 
   const onPressTransaction = (key) => {
@@ -269,8 +278,7 @@ const TransactionList = ({navigation}) => {
       </Header>
       <Content>
         <List>
-          {Object.keys(transactionList).map((key, index) => {
-            const transaction = transactionList[key];
+          {transactionList.map((transaction, index) => {
             const borderColor =
               transaction['status'] === 'SUCCESS'
                 ? '#54B685'
