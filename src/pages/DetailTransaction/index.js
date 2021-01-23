@@ -1,7 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, View, BackHandler, Touchable} from 'react-native';
+import {StyleSheet, View, BackHandler, ToastAndroid} from 'react-native';
+import Clipboard from '@react-native-community/clipboard';
 
-import {Container, Content, Text, Grid, Col} from 'native-base';
+import {Container, Content, Text, Grid, Col, Icon} from 'native-base';
 import {formatCurrency} from '../../utils/currency';
 import {formatDate} from '../../utils/date';
 import {TouchableHighlight} from 'react-native-gesture-handler';
@@ -10,7 +11,6 @@ const DetailTransaction = ({navigation, route}) => {
   const [transaction, setTransction] = useState({});
 
   useEffect(() => {
-    console.log(route.params.transaction);
     BackHandler.addEventListener('hardwareBackPress', handleBackPress);
     setTransction({...route.params.transaction});
   }, []);
@@ -22,6 +22,11 @@ const DetailTransaction = ({navigation, route}) => {
 
   const onPressClose = () => {
     handleBackPress();
+  };
+
+  const copyToClipboard = () => {
+    Clipboard.setString(`#${transaction['id']}`);
+    ToastAndroid.show('ID Transaksi tersalin', ToastAndroid.SHORT);
   };
 
   return (
@@ -43,7 +48,18 @@ const DetailTransaction = ({navigation, route}) => {
             <Text
               style={{
                 fontWeight: 'bold',
-              }}>{`ID TRANSAKSI: #${transaction['id']}`}</Text>
+              }}>
+              {`ID TRANSAKSI: #${transaction['id']} `}
+              <Icon
+                onPress={() => copyToClipboard()}
+                name="content-copy"
+                type="MaterialCommunityIcons"
+                style={{
+                  fontSize: 18,
+                  color: '#EB7F5C',
+                }}
+              />
+            </Text>
           </View>
           <Grid
             style={{
@@ -67,19 +83,21 @@ const DetailTransaction = ({navigation, route}) => {
             </Col>
           </Grid>
           <View style={{paddingHorizontal: 24, paddingVertical: 18}}>
-            <View>
-              <Text style={{fontWeight: 'bold'}}>{`${
-                transaction['sender_bank']
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Text style={{fontWeight: 'bold'}}>
+                {transaction['sender_bank']
                   ? transaction['sender_bank'].toUpperCase()
-                  : null
-              } → ${
-                transaction['beneficiary_bank']
+                  : null}
+              </Text>
+              <Icon name="arrow-right" type="Feather" style={{fontSize: 22}} />
+              <Text style={{fontWeight: 'bold'}}>
+                {transaction['beneficiary_bank']
                   ? transaction['beneficiary_bank'].toUpperCase()
-                  : null
-              }`}</Text>
+                  : null}
+              </Text>
             </View>
             <Grid style={{marginTop: 18}}>
-              <Col>
+              <Col style={{flex: 3}}>
                 <Text style={{fontWeight: 'bold'}}>
                   {transaction['beneficiary_name']
                     ? transaction['beneficiary_name'].toUpperCase()
@@ -87,24 +105,24 @@ const DetailTransaction = ({navigation, route}) => {
                 </Text>
                 <Text>{transaction['account_number']}</Text>
               </Col>
-              <Col>
+              <Col style={{flex: 2}}>
                 <Text style={{fontWeight: 'bold'}}>NOMINAL</Text>
                 <Text>{formatCurrency(transaction['amount'])}</Text>
               </Col>
             </Grid>
             <Grid style={{marginTop: 18}}>
-              <Col>
+              <Col style={{flex: 3}}>
                 <Text style={{fontWeight: 'bold'}}>BERITA TRANSFER</Text>
                 <Text>{transaction['remark']}</Text>
               </Col>
-              <Col>
+              <Col style={{flex: 2}}>
                 <Text style={{fontWeight: 'bold'}}>KODE UNIK</Text>
                 <Text>{transaction['unique_code']}</Text>
               </Col>
             </Grid>
             <Grid style={{marginTop: 18}}>
               <Col>
-                <Text style={{fontWeight: 'bold'}}>WAKTU TRANSFER</Text>
+                <Text style={{fontWeight: 'bold'}}>WAKTU DIBUAT</Text>
                 <Text>{formatDate(transaction['created_at'])}</Text>
               </Col>
             </Grid>
