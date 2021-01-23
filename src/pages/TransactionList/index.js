@@ -9,18 +9,37 @@ import {
   Item,
   Input,
   Button,
+  Left,
+  Radio,
   Right,
+  Body,
   Grid,
   Col,
 } from 'native-base';
-import {View, TouchableHighlight} from 'react-native';
+import {
+  StyleSheet,
+  Modal,
+  View,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from 'react-native';
 
 import {formatCurrency} from '../../utils/currency';
 import {formatDate} from '../../utils/date';
 
 const TransactionList = ({navigation}) => {
   const [search, setSearch] = useState('');
+  const [modalVisible, setModalVisible] = useState(false);
   const [transactionList, setTransactionList] = useState({});
+  const [selectedSortOption, setSelectedSortOption] = useState(0);
+
+  const sortOption = [
+    'URUTKAN',
+    'Nama A-Z',
+    'Nama Z-A',
+    'Tanggal Terbaru',
+    'Tanggal Terlama',
+  ];
 
   useEffect(() => {
     const list = {
@@ -174,6 +193,15 @@ const TransactionList = ({navigation}) => {
     });
   };
 
+  const onPressRadio = (index) => {
+    setSelectedSortOption(index);
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
   const renderSuccessButton = () => {
     return (
       <TouchableHighlight>
@@ -206,8 +234,15 @@ const TransactionList = ({navigation}) => {
   };
 
   return (
-    <Container style={{backgroundColor: '#F7F9F8'}}>
-      <Header searchBar rounded style={{backgroundColor: 'white', margin: 10}}>
+    <Container style={{backgroundColor: '#F5F9F8'}}>
+      <Header
+        searchBar
+        rounded
+        style={{
+          backgroundColor: 'white',
+          margin: 10,
+          borderRadius: 6,
+        }}>
         <Grid>
           <Col style={{flex: 2}}>
             <Item>
@@ -220,13 +255,15 @@ const TransactionList = ({navigation}) => {
             </Item>
           </Col>
           <Col style={{flex: 1}}>
-            <View
+            <TouchableHighlight
+              onPress={() => toggleModal()}
+              underlayColor={'white'}
               style={{flex: 1, justifyContent: 'center', marginLeft: 'auto'}}>
               <Text
                 style={{fontSize: 12, fontWeight: 'bold', color: '#EB7F5C'}}>
-                Tanggal Terbaru
+                {sortOption[selectedSortOption]}
               </Text>
-            </View>
+            </TouchableHighlight>
           </Col>
         </Grid>
       </Header>
@@ -263,7 +300,7 @@ const TransactionList = ({navigation}) => {
                   ].toUpperCase()} → ${transaction[
                     'beneficiary_bank'
                   ].toUpperCase()}`}</Text>
-                  <Text>{transaction['beneficiary_name']}</Text>
+                  <Text>{transaction['beneficiary_name'].toUpperCase()}</Text>
                   <Text>
                     {`${formatCurrency(transaction['amount'])} • ${formatDate(
                       transaction['created_at'],
@@ -282,19 +319,100 @@ const TransactionList = ({navigation}) => {
           })}
         </List>
       </Content>
+
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => toggleModal()}>
+        <TouchableWithoutFeedback onPress={() => toggleModal()}>
+          <View style={styles.modalOverlay} />
+        </TouchableWithoutFeedback>
+
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Container
+              style={{
+                width: 320,
+                maxHeight: 320,
+                paddingVertical: 24,
+                borderRadius: 10,
+              }}>
+              <Content>
+                {sortOption.map((option, index) => {
+                  return (
+                    <ListItem
+                      key={index}
+                      selected={index === selectedSortOption}
+                      style={{borderColor: 'white'}}>
+                      <Left style={{maxWidth: 24}}>
+                        <Radio
+                          onPress={() => onPressRadio(index)}
+                          color={'#EB7F5C'}
+                          selectedColor={'#EB7F5C'}
+                          selected={index === selectedSortOption}
+                        />
+                      </Left>
+                      <Body style={{marginBottom: 'auto'}}>
+                        <Text style={{color: 'black'}}>{option}</Text>
+                      </Body>
+                    </ListItem>
+                  );
+                })}
+              </Content>
+            </Container>
+          </View>
+        </View>
+      </Modal>
     </Container>
   );
 };
 
 export default TransactionList;
 
-// const styles = StyleSheet.create({
-//   background: {
-//     flex: 1,
-//     alignItems: 'center',
-//   },
-//   text: {
-//     fontSize: 16,
-//     marginTop: 10,
-//   },
-// });
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: 'white',
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+    borderRadius: 8,
+  },
+  openButton: {
+    marginTop: 14,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: 'white',
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalText: {
+    marginBottom: 18,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  modalOverlay: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+});
