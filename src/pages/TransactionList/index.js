@@ -196,9 +196,9 @@ const TransactionList = ({navigation}) => {
     setTransactionList(sortAndSearchList(list, search, selectedSortOption));
   }, []);
 
-  const onPressTransaction = (key) => {
+  const onPressTransaction = (index) => {
     navigation.navigate('Detail Transaction', {
-      transaction: transactionList[key],
+      transaction: transactionList[index],
     });
   };
 
@@ -290,7 +290,7 @@ const TransactionList = ({navigation}) => {
               <ListItem
                 noIndent={true}
                 key={index}
-                onPress={() => onPressTransaction(key)}
+                onPress={() => onPressTransaction(index)}
                 style={{
                   backgroundColor: 'white',
                   marginBottom: 8,
