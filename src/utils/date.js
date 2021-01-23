@@ -29,5 +29,5 @@ export const isDateBefore = (dateA, dateB) => {
   const newDateA = new Date(parseDate(dateA));
   const newDateB = new Date(parseDate(dateB));
 
-  return newDateA < newDateB;
+  return newDateA > newDateB;
 };
