@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
+import {Logo} from '../../assets';
 
 const Splash = ({navigation}) => {
   useEffect(() => {
     setTimeout(() => {
       navigation.replace('Transaction List');
-    }, 3000);
+    }, 1500);
   }, [navigation]);
 
   return (
     <View style={styles.background}>
-      <Text style={styles.text}>Loading</Text>
+      <Image source={Logo} style={styles.logo} />
     </View>
   );
 };
@@ -23,8 +24,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  text: {
-    fontSize: 16,
-    marginTop: 10,
+  logo: {
+    width: 100,
+    height: 100,
   },
 });
