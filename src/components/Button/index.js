@@ -6,8 +6,21 @@ const Button = (props) => {
   const {text, size, type, onPress, icon, iconName, iconType} = props;
 
   let fontSize;
-  if (size === 'sm') fontSize = 10;
-  else if (size === 'md') fontSize = 12;
+  switch (size) {
+    case 'sm': {
+      fontSize = 10;
+      break;
+    }
+    case 'md': {
+      fontSize = 12;
+      break;
+    }
+    case 'lg': {
+      fontSize = 14;
+      break;
+    }
+    default:
+  }
 
   let buttonStyle = styles.button;
   let textColor;

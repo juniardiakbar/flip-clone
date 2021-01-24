@@ -1,7 +1,6 @@
 import {isDateBefore} from './date';
 
 const quickSort = (originalList, option) => {
-  console.log(originalList);
   if (originalList.length <= 1) {
     return originalList;
   } else {
@@ -87,7 +86,6 @@ export const sortAndSearchList = (list, search, sort) => {
 
   if (sort !== 0) {
     const sortList = quickSort(newList, sort);
-    console.log(sortList);
     newList = [...sortList];
   }
 
