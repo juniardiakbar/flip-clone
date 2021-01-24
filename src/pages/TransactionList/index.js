@@ -1,32 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {
-  Container,
-  Content,
-  List,
-  ListItem,
-  Text,
-  Item,
-  Input,
-  Icon,
-  Left,
-  Radio,
-  Right,
-  Body,
-  Grid,
-  Col,
-} from 'native-base';
-import {
-  StyleSheet,
-  Modal,
-  View,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-} from 'react-native';
+import {Container, Content, List, ListItem, Text} from 'native-base';
+import {StyleSheet, View} from 'react-native';
 
 import {Button, HeaderSearch, ModalFilter, Transaction} from '../../components';
-import {formatCurrency} from '../../utils/currency';
-import {formatDate} from '../../utils/date';
 import {sortAndSearchList} from '../../utils/list';
+import {PRIMARY, SECONDARY, SUCCESS} from '../../utils/colors';
 
 const TransactionList = ({navigation}) => {
   const [search, setSearch] = useState('');
@@ -34,6 +12,7 @@ const TransactionList = ({navigation}) => {
   const [transactionListOriginal, setTransactionListOriginal] = useState({});
   const [transactionList, setTransactionList] = useState([]);
   const [selectedSortOption, setSelectedSortOption] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
 
   const sortOption = [
     'URUTKAN',
@@ -61,6 +40,7 @@ const TransactionList = ({navigation}) => {
       setTransactionList(
         sortAndSearchList(fetchedList, search, selectedSortOption),
       );
+      setIsLoading(false);
     } catch (err) {
       console.log(err.message);
     }
@@ -93,8 +73,14 @@ const TransactionList = ({navigation}) => {
     ) : null;
   };
 
+  const Loading = (
+    <View style={{...styles.loading}}>
+      <Text>Memuat Data Transaksi...</Text>
+    </View>
+  );
+
   return (
-    <Container style={{backgroundColor: '#F5F9F8'}}>
+    <Container style={{backgroundColor: SECONDARY}}>
       <HeaderSearch
         search={search}
         setSearch={setSearch}
@@ -103,31 +89,35 @@ const TransactionList = ({navigation}) => {
         toggleModal={toggleModalSort}
       />
       <Content>
-        <List>
-          {transactionList.map((transaction, index) => {
-            const color =
-              transaction['status'] === 'SUCCESS'
-                ? '#54B685'
-                : transaction['status'] === 'PENDING'
-                ? '#EB7F5C'
-                : '000A00';
+        {isLoading ? (
+          Loading
+        ) : (
+          <List>
+            {transactionList.map((transaction, index) => {
+              const color =
+                transaction['status'] === 'SUCCESS'
+                  ? SUCCESS
+                  : transaction['status'] === 'PENDING'
+                  ? PRIMARY
+                  : '000A00';
 
-            return (
-              <ListItem
-                noIndent={true}
-                key={index}
-                onPress={() => onPressTransaction(index)}
-                style={{...styles.listItem, borderColor: color}}>
-                <View style={{flexDirection: 'row'}}>
-                  <Transaction transaction={transaction} />
-                  <View style={{marginTop: 'auto', marginBottom: 'auto'}}>
-                    {renderTransactionStatus(transaction)}
+              return (
+                <ListItem
+                  noIndent={true}
+                  key={index}
+                  onPress={() => onPressTransaction(index)}
+                  style={{...styles.listItem, borderColor: color}}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Transaction transaction={transaction} />
+                    <View style={{marginTop: 'auto', marginBottom: 'auto'}}>
+                      {renderTransactionStatus(transaction)}
+                    </View>
                   </View>
-                </View>
-              </ListItem>
-            );
-          })}
-        </List>
+                </ListItem>
+              );
+            })}
+          </List>
+        )}
       </Content>
 
       <ModalFilter
@@ -153,5 +143,10 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderTopLeftRadius: 8,
     borderBottomColor: 'white',
+  },
+  loading: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

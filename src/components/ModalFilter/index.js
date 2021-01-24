@@ -9,6 +9,7 @@ import {
   Body,
   Text,
 } from 'native-base';
+import {PRIMARY} from '../../utils/colors';
 
 const ModalFilter = (props) => {
   const {
@@ -48,8 +49,8 @@ const ModalFilter = (props) => {
                     <Left style={{maxWidth: 24}}>
                       <Radio
                         onPress={() => onPressFilter(index)}
-                        color={'#EB7F5C'}
-                        selectedColor={'#EB7F5C'}
+                        color={PRIMARY}
+                        selectedColor={PRIMARY}
                         selected={index === selectedSortOption}
                       />
                     </Left>

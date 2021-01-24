@@ -3,9 +3,9 @@ import Clipboard from '@react-native-community/clipboard';
 import {StyleSheet, View, BackHandler, Text, ToastAndroid} from 'react-native';
 import {Container, Content, Grid, Col, Icon} from 'native-base';
 
-import {Button} from '../../components';
 import {formatCurrency} from '../../utils/currency';
 import {formatDate} from '../../utils/date';
+import {PRIMARY, SECONDARY} from '../../utils/colors';
 
 const DetailTransaction = ({navigation, route}) => {
   const [transaction, setTransction] = useState({});
@@ -125,7 +125,7 @@ export default DetailTransaction;
 
 const styles = StyleSheet.create({
   background: {
-    backgroundColor: '#F5F9F8',
+    backgroundColor: SECONDARY,
   },
   wrapper: {
     marginTop: 24,
@@ -137,20 +137,20 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     borderWidth: 4,
     borderColor: 'white',
-    borderBottomColor: '#F5F9F8',
+    borderBottomColor: SECONDARY,
   },
   bold: {
     fontWeight: 'bold',
   },
   icon: {
     fontSize: 18,
-    color: '#EB7F5C',
+    color: PRIMARY,
   },
   buttonWrapper: {
     flex: 1,
     marginLeft: 'auto',
   },
   buttonClose: {
-    color: '#EB7F5C',
+    color: PRIMARY,
   },
 });

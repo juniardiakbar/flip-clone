@@ -1,6 +1,7 @@
 import React from 'react';
 import {StyleSheet, TouchableHighlight, View, Text} from 'react-native';
 import {Icon} from 'native-base';
+import {PRIMARY, SUCCESS} from '../../utils/colors';
 
 const Button = (props) => {
   const {text, size, type, onPress, icon, iconName, iconType} = props;
@@ -40,7 +41,7 @@ const Button = (props) => {
       break;
     }
     case 'primary-transparent': {
-      textColor = {color: '#EB7F5C'};
+      textColor = {color: PRIMARY};
       bold = true;
       break;
     }
@@ -59,7 +60,7 @@ const Button = (props) => {
           <Icon
             name={iconName}
             type={iconType}
-            style={{fontSize: 14, color: '#EB7F5C'}}
+            style={{fontSize: 14, color: PRIMARY}}
           />
         ) : null}
       </View>
@@ -69,11 +70,11 @@ const Button = (props) => {
 
 const styles = StyleSheet.create({
   success: {
-    backgroundColor: '#54B685',
+    backgroundColor: SUCCESS,
   },
   primaryOutline: {
-    borderColor: '#EB7F5C',
-    borderWidth: 1,
+    borderColor: PRIMARY,
+    borderWidth: 2,
   },
   button: {
     padding: 6,
