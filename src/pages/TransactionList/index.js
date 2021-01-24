@@ -5,7 +5,6 @@ import {
   List,
   ListItem,
   Text,
-  Header,
   Item,
   Input,
   Icon,
@@ -118,17 +117,17 @@ const TransactionList = ({navigation}) => {
 
   return (
     <Container style={{backgroundColor: '#F5F9F8'}}>
-      <Header
-        searchBar
-        rounded
+      <View
         style={{
+          flexDirection: 'row',
           backgroundColor: 'white',
-          margin: 10,
           borderRadius: 6,
+          margin: 10,
+          paddingHorizontal: 10,
         }}>
         <Grid>
           <Col style={{flex: 2}}>
-            <Item>
+            <Item style={{borderBottomColor: 'white'}}>
               <Icon
                 name="search"
                 style={{marginHorizontal: -10, color: '#A3A3A3'}}
@@ -157,7 +156,7 @@ const TransactionList = ({navigation}) => {
             </TouchableHighlight>
           </Col>
         </Grid>
-      </Header>
+      </View>
       <Content>
         <List>
           {transactionList.map((transaction, index) => {
@@ -260,7 +259,11 @@ const TransactionList = ({navigation}) => {
                         />
                       </Left>
                       <Body style={{marginBottom: 'auto'}}>
-                        <Text style={{color: 'black'}}>{option}</Text>
+                        <Text
+                          style={{color: 'black'}}
+                          onPress={() => onPressRadio(index)}>
+                          {option}
+                        </Text>
                       </Body>
                     </ListItem>
                   );
