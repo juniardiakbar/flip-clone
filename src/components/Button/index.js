@@ -24,20 +24,24 @@ const Button = (props) => {
 
   let buttonStyle = styles.button;
   let textColor;
+  let bold = false;
 
   switch (type) {
     case 'success': {
       buttonStyle = {...buttonStyle, ...styles.success};
       textColor = {color: 'white'};
+      bold = true;
       break;
     }
     case 'primary-outline': {
       buttonStyle = {...buttonStyle, ...styles.primaryOutline};
       textColor = {color: 'black'};
+      bold = true;
       break;
     }
     case 'primary-transparent': {
-      textColor = {color: '#EB7F5C', fontWeight: 'bold'};
+      textColor = {color: '#EB7F5C'};
+      bold = true;
       break;
     }
     default:
@@ -48,7 +52,9 @@ const Button = (props) => {
       underlayColor={'white'}
       onPress={() => (onPress ? onPress() : null)}>
       <View style={buttonStyle}>
-        <Text style={{...textColor, fontSize}}>{text}</Text>
+        <Text bold={bold} style={{...textColor, fontSize}}>
+          {text}
+        </Text>
         {icon ? (
           <Icon
             name={iconName}

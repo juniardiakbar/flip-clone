@@ -11,13 +11,13 @@ const Transaction = (props) => {
   return (
     <Content>
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-        <Text style={{fontWeight: 'bold'}}>
+        <Text bold>
           {transaction['sender_bank']
             ? transaction['sender_bank'].toUpperCase()
             : null}
         </Text>
         <Icon name="arrow-right" type="Feather" style={{fontSize: 18}} />
-        <Text style={{fontWeight: 'bold'}}>
+        <Text bold>
           {transaction['beneficiary_bank']
             ? transaction['beneficiary_bank'].toUpperCase()
             : null}

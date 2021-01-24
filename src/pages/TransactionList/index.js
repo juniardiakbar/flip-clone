@@ -87,9 +87,9 @@ const TransactionList = ({navigation}) => {
 
   const renderTransactionStatus = (transaction) => {
     return transaction.status === 'SUCCESS' ? (
-      <Button text="Berhasil" size="sm" type="success" />
+      <Button text="Berhasil" size="md" type="success" />
     ) : transaction.status === 'PENDING' ? (
-      <Button text="Pengecekan" size="sm" type="primary-outline" />
+      <Button text="Pengecekan" size="md" type="primary-outline" />
     ) : null;
   };
 
@@ -118,8 +118,12 @@ const TransactionList = ({navigation}) => {
                 key={index}
                 onPress={() => onPressTransaction(index)}
                 style={{...styles.listItem, borderColor: color}}>
-                <Transaction transaction={transaction} />
-                <Right>{renderTransactionStatus(transaction)}</Right>
+                <View style={{flexDirection: 'row'}}>
+                  <Transaction transaction={transaction} />
+                  <View style={{marginTop: 'auto', marginBottom: 'auto'}}>
+                    {renderTransactionStatus(transaction)}
+                  </View>
+                </View>
               </ListItem>
             );
           })}
