@@ -1,14 +1,12 @@
 import React from 'react';
-import {StyleSheet, View, Modal, TouchableWithoutFeedback} from 'react-native';
 import {
-  Container,
-  Content,
-  ListItem,
-  Left,
-  Radio,
-  Body,
+  StyleSheet,
+  View,
+  Modal,
+  TouchableWithoutFeedback,
   Text,
-} from 'native-base';
+} from 'react-native';
+import {Container, Content, ListItem, Radio} from 'native-base';
 import {PRIMARY} from '../../utils/colors';
 
 const ModalFilter = (props) => {
@@ -32,40 +30,32 @@ const ModalFilter = (props) => {
 
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Container
-            style={{
-              width: 320,
-              maxHeight: 320,
-              paddingVertical: 24,
-              borderRadius: 10,
-            }}>
-            <Content>
-              {sortOption.map((option, index) => {
-                return (
-                  <ListItem
-                    key={index}
-                    selected={index === selectedSortOption}
-                    style={{borderColor: 'white'}}>
-                    <Left style={{maxWidth: 24}}>
-                      <Radio
-                        onPress={() => onPressFilter(index)}
-                        color={PRIMARY}
-                        selectedColor={PRIMARY}
-                        selected={index === selectedSortOption}
-                      />
-                    </Left>
-                    <Body style={{marginBottom: 'auto'}}>
-                      <Text
-                        style={{color: 'black'}}
-                        onPress={() => onPressFilter(index)}>
-                        {option}
-                      </Text>
-                    </Body>
-                  </ListItem>
-                );
-              })}
-            </Content>
-          </Container>
+          <View style={styles.modalContainer}>
+            {sortOption.map((option, index) => {
+              return (
+                <ListItem
+                  key={index}
+                  selected={index === selectedSortOption}
+                  style={{flexDirection: 'row', borderColor: 'white'}}>
+                  <View style={{marginRight: 4}}>
+                    <Radio
+                      onPress={() => onPressFilter(index)}
+                      color={PRIMARY}
+                      selectedColor={PRIMARY}
+                      selected={index === selectedSortOption}
+                    />
+                  </View>
+                  <View>
+                    <Text
+                      style={{color: 'black'}}
+                      onPress={() => onPressFilter(index)}>
+                      {option}
+                    </Text>
+                  </View>
+                </ListItem>
+              );
+            })}
+          </View>
         </View>
       </View>
     </Modal>
@@ -77,10 +67,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22,
   },
   modalView: {
-    margin: 20,
     backgroundColor: 'white',
     alignItems: 'center',
     shadowColor: '#000',
@@ -100,6 +88,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  modalContainer: {
+    flexDirection: 'column',
+    width: 300,
+    paddingVertical: 24,
   },
 });
 
