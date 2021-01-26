@@ -1,7 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import Clipboard from '@react-native-community/clipboard';
-import {StyleSheet, View, BackHandler, Text, ToastAndroid} from 'react-native';
-import {Container, Content, Grid, Col, Icon} from 'native-base';
+import {
+  StyleSheet,
+  View,
+  ScrollView,
+  BackHandler,
+  Text,
+  ToastAndroid,
+} from 'react-native';
+import {Icon} from 'native-base';
 
 import {formatCurrency} from '../../utils/currency';
 import {formatDate} from '../../utils/date';
@@ -30,10 +37,10 @@ const DetailTransaction = ({navigation, route}) => {
   };
 
   return (
-    <Container>
-      <Content style={styles.background}>
+    <View style={{flex: 1}}>
+      <ScrollView style={styles.background}>
         <View style={styles.wrapper}>
-          <Grid style={styles.grid}>
+          <View style={styles.grid}>
             <Text bold>
               {`ID TRANSAKSI: #${transaction['id']} `}
               <Icon
@@ -43,7 +50,7 @@ const DetailTransaction = ({navigation, route}) => {
                 style={styles.icon}
               />
             </Text>
-          </Grid>
+          </View>
           <View style={{...styles.grid, flex: 1, flexDirection: 'row'}}>
             <View style={{flex: 2}}>
               <Text bold>DETAIL TRANSAKSI</Text>
@@ -77,47 +84,47 @@ const DetailTransaction = ({navigation, route}) => {
             {/* Finish Sender Bank -> Beneficiary Bank */}
 
             {/* Start Beneficiary Name and Amount */}
-            <Grid style={{marginTop: 18}}>
-              <Col style={{flex: 3}}>
+            <View style={{...styles.column}}>
+              <View style={{flex: 3}}>
                 <Text bold>
                   {transaction['beneficiary_name']
                     ? transaction['beneficiary_name'].toUpperCase()
                     : null}
                 </Text>
                 <Text>{transaction['account_number']}</Text>
-              </Col>
-              <Col style={{flex: 2}}>
+              </View>
+              <View style={{flex: 2}}>
                 <Text bold>NOMINAL</Text>
                 <Text>{formatCurrency(transaction['amount'])}</Text>
-              </Col>
-            </Grid>
+              </View>
+            </View>
             {/* Finish Beneficiary Name and Amount */}
 
             {/* Start Remark and Unique Code */}
-            <Grid style={{marginTop: 18}}>
-              <Col style={{flex: 3}}>
+            <View style={{...styles.column}}>
+              <View style={{flex: 3}}>
                 <Text bold>BERITA TRANSFER</Text>
                 <Text>{transaction['remark']}</Text>
-              </Col>
-              <Col style={{flex: 2}}>
+              </View>
+              <View style={{flex: 2}}>
                 <Text bold>KODE UNIK</Text>
                 <Text>{transaction['unique_code']}</Text>
-              </Col>
-            </Grid>
+              </View>
+            </View>
             {/* Finish Remark and Unique Code */}
 
             {/* Start Created Date */}
-            <Grid style={{marginTop: 18}}>
-              <Col>
+            <View style={{...styles.column}}>
+              <View>
                 <Text bold>WAKTU DIBUAT</Text>
                 <Text>{formatDate(transaction['created_at'])}</Text>
-              </Col>
-            </Grid>
+              </View>
+            </View>
             {/* Finish Created Date */}
           </View>
         </View>
-      </Content>
-    </Container>
+      </ScrollView>
+    </View>
   );
 };
 
@@ -138,6 +145,10 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: 'white',
     borderBottomColor: SECONDARY,
+  },
+  column: {
+    flexDirection: 'row',
+    marginTop: 18,
   },
   bold: {
     fontWeight: 'bold',

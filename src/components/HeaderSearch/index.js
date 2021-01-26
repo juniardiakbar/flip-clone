@@ -1,6 +1,6 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
-import {Grid, Col, Item, Icon, Input} from 'native-base';
+import {StyleSheet, View, TouchableOpacity, TextInput} from 'react-native';
+import {Icon} from 'native-base';
 import {Button} from '../';
 
 const HeaderSearch = (props) => {
@@ -14,19 +14,19 @@ const HeaderSearch = (props) => {
 
   return (
     <View style={styles.container}>
-      <Grid>
-        <Col style={{flex: 2}}>
-          <Item style={styles.item}>
+      <View style={styles.column}>
+        <View style={{flex: 2}}>
+          <TouchableOpacity style={styles.item}>
             <Icon name="search" style={styles.icon} />
-            <Input
+            <TextInput
               style={styles.input}
               value={search}
               placeholder={'Cari nama, bank, atau nominal'}
               onChangeText={(value) => setSearch(value)}
             />
-          </Item>
-        </Col>
-        <Col style={{flex: 1}}>
+          </TouchableOpacity>
+        </View>
+        <View style={{flex: 1}}>
           <View style={styles.buttonContainer}>
             <Button
               text={sortOption[selectedSortOption]}
@@ -37,8 +37,8 @@ const HeaderSearch = (props) => {
               iconName="chevron-down"
             />
           </View>
-        </Col>
-      </Grid>
+        </View>
+      </View>
     </View>
   );
 };
@@ -51,16 +51,22 @@ const styles = StyleSheet.create({
     margin: 10,
     paddingHorizontal: 10,
   },
+  column: {
+    flex: 1,
+    flexDirection: 'row',
+  },
   buttonContainer: {
     flex: 1,
     justifyContent: 'center',
     marginLeft: 'auto',
   },
   item: {
+    flexDirection: 'row',
     borderBottomColor: 'white',
   },
   icon: {
-    marginHorizontal: -8,
+    marginTop: 'auto',
+    marginBottom: 'auto',
     color: '#A3A3A3',
   },
   input: {

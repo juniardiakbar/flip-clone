@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react';
-import {Container, Content, List, ListItem, Text} from 'native-base';
-import {StyleSheet, View} from 'react-native';
+import {ListItem} from 'native-base';
+import {StyleSheet, View, ScrollView, Text} from 'react-native';
 
 import {Button, HeaderSearch, ModalFilter, Transaction} from '../../components';
 import {sortAndSearchList} from '../../utils/list';
-import {PRIMARY, SECONDARY, SUCCESS} from '../../utils/colors';
 
 const TransactionList = ({navigation}) => {
   const [search, setSearch] = useState('');
@@ -73,14 +72,17 @@ const TransactionList = ({navigation}) => {
     ) : null;
   };
 
-  const Loading = (
-    <View style={{...styles.loading}}>
-      <Text>Memuat Data Transaksi...</Text>
-    </View>
+  const loading = (
+    <ScrollView contentContainerStyle={{flexGrow: 1}}>
+      <View
+        style={{flexGrow: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <Text bold>{'Memuat Data Transaksi ...'}</Text>
+      </View>
+    </ScrollView>
   );
 
   return (
-    <Container style={{backgroundColor: SECONDARY}}>
+    <View style={{flex: 1, backgroundColor: '#F5F9F8'}}>
       <HeaderSearch
         search={search}
         setSearch={setSearch}
@@ -88,17 +90,17 @@ const TransactionList = ({navigation}) => {
         selectedSortOption={selectedSortOption}
         toggleModal={toggleModalSort}
       />
-      <Content>
-        {isLoading ? (
-          Loading
-        ) : (
-          <List>
+      {isLoading ? (
+        loading
+      ) : (
+        <ScrollView>
+          <View>
             {transactionList.map((transaction, index) => {
               const color =
                 transaction['status'] === 'SUCCESS'
-                  ? SUCCESS
+                  ? '#54B685'
                   : transaction['status'] === 'PENDING'
-                  ? PRIMARY
+                  ? '#EB7F5C'
                   : '000A00';
 
               return (
@@ -107,18 +109,14 @@ const TransactionList = ({navigation}) => {
                   key={index}
                   onPress={() => onPressTransaction(index)}
                   style={{...styles.listItem, borderColor: color}}>
-                  <View style={{flexDirection: 'row'}}>
-                    <Transaction transaction={transaction} />
-                    <View style={{marginTop: 'auto', marginBottom: 'auto'}}>
-                      {renderTransactionStatus(transaction)}
-                    </View>
-                  </View>
+                  <Transaction transaction={transaction} />
+                  <View>{renderTransactionStatus(transaction)}</View>
                 </ListItem>
               );
             })}
-          </List>
-        )}
-      </Content>
+          </View>
+        </ScrollView>
+      )}
 
       <ModalFilter
         sortOption={sortOption}
@@ -127,7 +125,7 @@ const TransactionList = ({navigation}) => {
         visible={modalVisible}
         toggleModal={toggleModalSort}
       />
-    </Container>
+    </View>
   );
 };
 
@@ -143,10 +141,7 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 8,
     borderTopLeftRadius: 8,
     borderBottomColor: 'white',
-  },
-  loading: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: 10,
+    flexDirection: 'row',
   },
 });
