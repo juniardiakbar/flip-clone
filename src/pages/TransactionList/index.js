@@ -29,11 +29,14 @@ const TransactionList = ({navigation}) => {
 
   const initListTransaction = async () => {
     try {
-      const fetchedList = await fetch(
-        'https://nextar.flip.id/frontend-test',
-      ).then((response) => {
-        return response.json();
-      });
+      const fetchedList = await fetch('https://nextar.flip.id/frontend-test')
+        .then((response) => {
+          return response.json();
+        })
+        .catch((err) => {
+          console.log('Error fetch list of transaction : ', err.message);
+          // Error handling
+        });
 
       setTransactionListOriginal({...fetchedList});
       setTransactionList(
@@ -41,7 +44,8 @@ const TransactionList = ({navigation}) => {
       );
       setIsLoading(false);
     } catch (err) {
-      console.log(err.message);
+      console.log('Error fetch list of transaction : ', err.message);
+      // Error handling
     }
   };
 
