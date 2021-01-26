@@ -25,9 +25,9 @@ export const formatDate = (date) => {
   return `${parsedDate[2]} ${MONTH[parsedDate[1]]} ${parsedDate[0]}`;
 };
 
-export const isDateBefore = (dateA, dateB) => {
-  const newDateA = new Date(...parseDate(dateA));
-  const newDateB = new Date(...parseDate(dateB));
+export const isDateBefore = (dateBefore, dateAfter) => {
+  const newDateBefore = new Date(...parseDate(dateBefore));
+  const newDateAfter = new Date(...parseDate(dateAfter));
 
-  return newDateA >= newDateB;
+  return newDateBefore >= newDateAfter;
 };
